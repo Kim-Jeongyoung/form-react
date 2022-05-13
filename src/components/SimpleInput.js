@@ -1,9 +1,16 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const SimpleInput = (props) => {
   const nameInputRef = useRef();
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(true);
+  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+
+  useEffect(() => {
+    if (enteredNameIsValid) {
+      console.log("Name Input is valid!");
+    }
+  }, [enteredNameIsValid]);
 
   const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
@@ -11,6 +18,8 @@ const SimpleInput = (props) => {
 
   const formSubmissionHandler = (event) => {
     event.preventDefault();
+
+    setEnteredNameTouched(true); // 폼이 submit되면 항상 user가 submit했다고 본다.
 
     if (enteredName.trim() === "") {
       setEnteredNameIsValid(false);
@@ -29,10 +38,13 @@ const SimpleInput = (props) => {
     setEnteredName(""); //reset entered value
   };
 
+  // user가 입력을 했으나 valid 한 것이 아닐 경우
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+
   // user가 이름을 input에 쓰는지 안 쓰는지에 따라서
-  const nameInputClasses = enteredNameIsValid
-    ? "form-control"
-    : "form-control invalid";
+  const nameInputClasses = nameInputIsInvalid
+    ? "form-control invalid"
+    : "form-control";
 
   return (
     <form onSubmit={formSubmissionHandler}>
@@ -46,7 +58,7 @@ const SimpleInput = (props) => {
           value={enteredName}
         />
         {/* user가 이름을 쓰지 않으면 에러 메세지 보여주기 */}
-        {!enteredNameIsValid && (
+        {nameInputIsInvalid && (
           <p className="error-text">Name must not be empty.</p>
         )}
       </div>
