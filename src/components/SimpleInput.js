@@ -18,6 +18,7 @@ const SimpleInput = (props) => {
     }
 
     setEnteredNameIsValid(true);
+
     console.log(enteredName);
 
     const enteredValue = nameInputRef.current.value;
@@ -27,9 +28,15 @@ const SimpleInput = (props) => {
 
     setEnteredName(""); //reset entered value
   };
+
+  // user가 이름을 input에 쓰는지 안 쓰는지에 따라서
+  const nameInputClasses = enteredNameIsValid
+    ? "form-control"
+    : "form-control invalid";
+
   return (
     <form onSubmit={formSubmissionHandler}>
-      <div className="form-control">
+      <div className={nameInputClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           ref={nameInputRef}
@@ -38,6 +45,7 @@ const SimpleInput = (props) => {
           onChange={nameInputChangeHandler}
           value={enteredName}
         />
+        {/* user가 이름을 쓰지 않으면 에러 메세지 보여주기 */}
         {!enteredNameIsValid && (
           <p className="error-text">Name must not be empty.</p>
         )}
