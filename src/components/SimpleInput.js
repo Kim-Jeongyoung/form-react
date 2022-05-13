@@ -16,6 +16,15 @@ const SimpleInput = (props) => {
     setEnteredName(event.target.value);
   };
 
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+
+    if (enteredName.trim() === "") {
+      setEnteredNameIsValid(false);
+      return;
+    }
+  };
+
   const formSubmissionHandler = (event) => {
     event.preventDefault();
 
@@ -55,6 +64,7 @@ const SimpleInput = (props) => {
           type="text"
           id="name"
           onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
           value={enteredName}
         />
         {/* user가 이름을 쓰지 않으면 에러 메세지 보여주기 */}
@@ -81,3 +91,8 @@ export default SimpleInput;
 // 6. onSubmit이랑 bind 해 줌
 // 7. form 안에 있는  button으로 form이 submit되면 http request를
 // 서버로 보냄 => 브라우저 & JS default behavior
+
+// 204.
+// 1.input에 onBlur 넣어주기
+// 2. nameInputBlurHandler 만들고 onblur와 바인딩 해 주기
+// 3. validate with if() {}
